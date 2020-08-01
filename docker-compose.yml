@@ -1,10 +1,31 @@
 version: "3"
 services:
+  db:
+    container_name: db
+    image: begr/p7-mysql:1.0
+    build:
+      context: ./mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+    networks:
+      - emp-network
+  phpmyadmin:
+    depends_on:
+       - db
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+       - '8080:80'
+    environment:
+        PMA_HOST: db
+    networks:
+      - emp-network       
   config-server:
     container_name: config-server
     build:
       context: ../config-server
-    image: p7-config-server:latest
+    image: begr/p7-config-server:1.0
     expose:
       - 9101
     networks:
@@ -13,7 +34,7 @@ services:
     container_name: eureka
     build:
       context: ../eureka-server
-    image: p7-eureka-server:latest
+    image: begr/p7-eureka-server:1.0
     expose:
       - 9102
     ports:
@@ -24,7 +45,7 @@ services:
     container_name: users
     build:
       context: ../users
-    image: p7-users:latest
+    image: begr/p7-users:1.0
     expose:
       - 9003
     networks:
@@ -41,7 +62,7 @@ services:
     container_name: books
     build:
       context: ../books
-    image: p7-books:latest
+    image: begr/p7-books:1.0
     expose:
       - 9001
     networks:
@@ -58,7 +79,7 @@ services:
     container_name: emprunts
     build:
       context: ../emprunts
-    image: p7-emprunts:latest
+    image: begr/p7-emprunts:1.0
     expose:
       - 9005
     networks:
@@ -75,7 +96,7 @@ services:
     container_name: appliweb
     build:
       context: ../appliweb
-    image: p7-appliweb:latest
+    image: begr/p7-appliweb:1.0
     expose:
       - 8086
     ports:
@@ -94,7 +115,7 @@ services:
     container_name: batch
     build:
       context: ../batch
-    image: p7-batch:latest
+    image: begr/p7-batch:1.0
     networks:
       - emp-network
     links:
@@ -109,7 +130,7 @@ services:
     container_name: zuul
     build:
       context: ../zuul-server
-    image: zuulserver:latest
+    image: begr/p7-zuulserver:1.0
     expose:
       - 9004
     ports:
