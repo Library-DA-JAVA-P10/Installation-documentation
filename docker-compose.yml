@@ -1,0 +1,127 @@
+version: "3"
+services:
+  config-server:
+    container_name: config-server
+    build:
+      context: ../config-server
+    image: p7-config-server:latest
+    expose:
+      - 9101
+    networks:
+      - emp-network
+  eureka:
+    container_name: eureka
+    build:
+      context: ../eureka-server
+    image: p7-eureka-server:latest
+    expose:
+      - 9102
+    ports:
+      - 9102:9102
+    networks:
+      - emp-network
+  users:
+    container_name: users
+    build:
+      context: ../users
+    image: p7-users:latest
+    expose:
+      - 9003
+    networks:
+      - emp-network
+    links:
+      - config-server:config-server
+      - eureka:eureka
+    depends_on:
+      - config-server
+      - eureka
+    logging:
+      driver: json-file
+  books:
+    container_name: books
+    build:
+      context: ../books
+    image: p7-books:latest
+    expose:
+      - 9001
+    networks:
+      - emp-network
+    links:
+      - config-server:config-server
+      - eureka:eureka
+    depends_on:
+      - config-server
+      - eureka
+    logging:
+      driver: json-file
+  emprunts:
+    container_name: emprunts
+    build:
+      context: ../emprunts
+    image: p7-emprunts:latest
+    expose:
+      - 9005
+    networks:
+      - emp-network
+    links:
+      - config-server:config-server
+      - eureka:eureka
+    depends_on:
+      - config-server
+      - eureka
+    logging:
+      driver: json-file
+  appliweb:
+    container_name: appliweb
+    build:
+      context: ../appliweb
+    image: p7-appliweb:latest
+    expose:
+      - 8086
+    ports:
+      - 8086:8086
+    networks:
+      - emp-network
+    links:
+      - config-server:config-server
+      - eureka:eureka
+    depends_on:
+      - config-server
+      - eureka
+    logging:
+      driver: json-file
+  batch:
+    container_name: batch
+    build:
+      context: ../batch
+    image: p7-batch:latest
+    networks:
+      - emp-network
+    links:
+      - config-server:config-server
+      - eureka:eureka
+    depends_on:
+      - config-server
+      - eureka
+    logging:
+      driver: json-file
+  zuul:
+    container_name: zuul
+    build:
+      context: ../zuul-server
+    image: zuulserver:latest
+    expose:
+      - 9004
+    ports:
+      - 9004:9004
+    networks:
+      - emp-network
+    links:
+      - eureka:eureka
+    depends_on:
+      - eureka
+    logging:
+      driver: json-file
+networks:
+  emp-network:
+    driver: bridge
