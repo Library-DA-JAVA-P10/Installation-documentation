@@ -24,7 +24,8 @@ services:
   config-server:
     container_name: config-server
     build:
-      context: ../config-server
+      context: ./docker
+      dockerfile: Dockerfile-config-server
     image: begr/p7-config-server:1.0
     expose:
       - 9101
@@ -33,7 +34,8 @@ services:
   eureka:
     container_name: eureka
     build:
-      context: ../eureka-server
+      context: ./docker
+      dockerfile: Dockerfile-eureka
     image: begr/p7-eureka-server:1.0
     expose:
       - 9102
@@ -44,7 +46,8 @@ services:
   users:
     container_name: users
     build:
-      context: ../users
+      context: ./docker
+      dockerfile: Dockerfile-users
     image: begr/p7-users:1.0
     expose:
       - 9003
@@ -61,7 +64,8 @@ services:
   books:
     container_name: books
     build:
-      context: ../books
+      context: ./docker
+      dockerfile: Dockerfile-books
     image: begr/p7-books:1.0
     expose:
       - 9001
@@ -78,7 +82,8 @@ services:
   emprunts:
     container_name: emprunts
     build:
-      context: ../emprunts
+      context: ./docker
+      dockerfile: Dockerfile-emprunts
     image: begr/p7-emprunts:1.0
     expose:
       - 9005
@@ -95,7 +100,8 @@ services:
   appliweb:
     container_name: appliweb
     build:
-      context: ../appliweb
+      context: ./docker
+      dockerfile: Dockerfile-appliweb
     image: begr/p7-appliweb:1.0
     expose:
       - 8086
@@ -114,7 +120,8 @@ services:
   batch:
     container_name: batch
     build:
-      context: ../batch
+      context: ./docker
+      dockerfile: Dockerfile-batch
     image: begr/p7-batch:1.0
     networks:
       - emp-network
@@ -129,7 +136,8 @@ services:
   zuul:
     container_name: zuul
     build:
-      context: ../zuul-server
+      context: ./docker
+      dockerfile: Dockerfile-zuul
     image: begr/p7-zuulserver:1.0
     expose:
       - 9004
